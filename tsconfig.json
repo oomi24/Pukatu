@@ -25,5 +25,10 @@
   },
   "include": ["src", "postcss.config.js", "tailwind.config.js"],
   "references": [{ "path": "./tsconfig.node.json" }],
-  "exclude": ["vite.config.ts"]
+  "exclude": ["vite.config.ts"],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  }
 }
