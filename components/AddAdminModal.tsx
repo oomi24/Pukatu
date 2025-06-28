@@ -68,7 +68,7 @@ const AddAdminModal: React.FC<AddAdminModalProps> = ({ show, onClose, onAddAdmin
     const newAdmin: AdminAccount = {
       id: `admin-${Date.now()}-${username.trim().toLowerCase()}`, // Generate unique ID
       username: username.trim(),
-      password: password, // In a real app, hash this password
+      password: password, // Aquí se guarda la contraseña
       displayName: displayName.trim(),
       whatsAppNumber: whatsAppNumber.trim() || undefined,
       securityQuestion: securityQuestion.trim() || undefined,
@@ -172,3 +172,13 @@ const AddAdminModal: React.FC<AddAdminModalProps> = ({ show, onClose, onAddAdmin
 };
 
 export default AddAdminModal;
+
+export interface AdminAccount {
+  id: string;
+  username: string;
+  password: string;
+  displayName: string;
+  whatsAppNumber?: string;
+  securityQuestion?: string;
+  securityAnswer?: string;
+}
