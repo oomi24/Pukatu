@@ -109,8 +109,8 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
     }
     
     const parsedGridTotal = parseInt(String(gridNumbersTotal), 10);
-    if (isNaN(parsedGridTotal) || parsedGridTotal <= 0 || parsedGridTotal > 500) { 
-        setErrorMessage("El total de números en cuadrícula debe ser un número positivo (ej: 100, máx 500)."); return;
+    if (isNaN(parsedGridTotal) || parsedGridTotal <= 0 || parsedGridTotal > 999) { 
+        setErrorMessage("El total de números en cuadrícula debe ser un número positivo (ej: 100, máx 999)."); return;
     }
     if (prizeDetails.some(detail => !detail.trim())) {
         setErrorMessage("Todos los detalles de premios deben estar llenos."); return;
@@ -207,7 +207,19 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
             </div>
             <div>
               <label htmlFor="gridNumbersTotal" className={labelClasses}>Total de Números en Cuadrícula <span className="text-red-500">*</span></label>
-              <input type="number" id="gridNumbersTotal" value={gridNumbersTotal} onChange={(e) => setGridNumbersTotal(e.target.value)} className={inputClasses} placeholder="Ej: 100" min="10" max="500" step="1" required disabled={isLoading}/>
+              <input
+                type="number"
+                id="gridNumbersTotal"
+                value={gridNumbersTotal}
+                onChange={(e) => setGridNumbersTotal(e.target.value)}
+                className={inputClasses}
+                placeholder="Ej: 100"
+                min="10"
+                max="999"
+                step="1"
+                required
+                disabled={isLoading}
+              />
             </div>
           </div>
           
