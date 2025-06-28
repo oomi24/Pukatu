@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { RaffleItem, UUID } from '../types';
+import { kv } from '@vercel/kv';
+
 interface AddRaffleModalProps {
   show: boolean;
   onClose: () => void;
@@ -29,6 +31,9 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
 
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const resetFormFields = useCallback(() => {
     // setRaffleType('grid'); // No longer needed to set, it's fixed
@@ -180,6 +185,25 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
     }
   };
 
+  const handleSave = async () => {
+    if (newPassword && newPassword === confirmPassword) {
+      // Aquí envías la nueva contraseña a Supabase o tu backend
+      const { error } = await supabase
+        .from('usuarios')
+        .update({ password: newPassword })
+        .eq('id', userId);
+
+      if (error) {
+        setErrorMessage('No se pudo actualizar la contraseña');
+      } else {
+        // Éxito
+      }
+    } else if (newPassword !== confirmPassword) {
+      setErrorMessage('Las contraseñas no coinciden');
+    }
+    // Si está vacío, no actualizas la contraseña
+  };
+
   if (!show) return null;
 
   const inputClasses = "w-full px-3 py-2.5 bg-[#1a1a1a] text-white border border-gray-600 focus:border-[#f7ca18] focus:outline-none focus:ring-1 focus:ring-[#f7ca18] rounded-md placeholder-gray-500 text-sm";
@@ -302,3 +326,18 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
 export default AddRaffleModal;
 
 declare module '@vercel/kv';
+
+export default async function handler(req, res) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Método no permitido' });
+  }
+
+  try {
+    const raffle = req.body;
+    // Guarda el sorteo con una clave única (por ejemplo, usando el id)
+    await kv.set(`raffle:${raffle.id}`, raffle);
+    return res.status(200).json({ message: 'Sorteo guardado correctamente' });
+  } catch (error) {
+    return res.status(500).json({ message: 'Error al guardar el sorteo' });
+  }
+}
