@@ -19,9 +19,9 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true, /* Allow default imports from modules with no default export */
-    "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
-    "types": ["vite/client"] /* Add vite/client types */
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": ["vite/client"]
   },
   "include": ["src", "postcss.config.js", "tailwind.config.js"],
   "references": [{ "path": "./tsconfig.node.json" }],
