@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import type { AdminAccount, UUID } from '../types';
+import type { UUID } from '../types';
 
 interface AddAdminModalProps {
   show: boolean;
