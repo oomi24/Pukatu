@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { RaffleItem, UUID } from '../types';
+import { supabase } from '../supabaseClient';
 
 interface AddRaffleModalProps {
   show: boolean;
@@ -155,10 +156,19 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
       soldNumbers: [], 
     };
     
-    await new Promise(resolve => setTimeout(resolve, 500)); 
-    onAdd(newRaffle);
+    const { data, error } = await supabase
+      .from('sorteos') // nombre de tu tabla en Supabase
+      .insert([newRaffle]);
+
     setIsLoading(false);
-    onClose(); 
+
+    if (error) {
+      setErrorMessage("Error al guardar el sorteo: " + error.message);
+      return;
+    }
+
+    onAdd(newRaffle); // solo si quieres actualizar el estado local
+    onClose();
   };
 
   if (!show) return null;
@@ -281,3 +291,10 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
   );
 };
 export default AddRaffleModal;
+
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
