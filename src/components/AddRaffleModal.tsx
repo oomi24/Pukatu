@@ -187,17 +187,8 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
 
   const handleSave = async () => {
     if (newPassword && newPassword === confirmPassword) {
-      // Aquí envías la nueva contraseña a Supabase o tu backend
-      const { error } = await supabase
-        .from('usuarios')
-        .update({ password: newPassword })
-        .eq('id', userId);
-
-      if (error) {
-        setErrorMessage('No se pudo actualizar la contraseña');
-      } else {
-        // Éxito
-      }
+      // Aquí estaba el código de Supabase, elimínalo o reemplázalo por lógica nueva si la necesitas
+      // ...
     } else if (newPassword !== confirmPassword) {
       setErrorMessage('Las contraseñas no coinciden');
     }
@@ -323,21 +314,5 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
     </div>
   );
 };
+
 export default AddRaffleModal;
-
-declare module '@vercel/kv';
-
-export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).json({ message: 'Método no permitido' });
-  }
-
-  try {
-    const raffle = req.body;
-    // Guarda el sorteo con una clave única (por ejemplo, usando el id)
-    await kv.set(`raffle:${raffle.id}`, raffle);
-    return res.status(200).json({ message: 'Sorteo guardado correctamente' });
-  } catch (error) {
-    return res.status(500).json({ message: 'Error al guardar el sorteo' });
-  }
-}
