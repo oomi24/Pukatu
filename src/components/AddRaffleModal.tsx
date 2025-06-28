@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { RaffleItem, UUID } from '../types';
-import { supabase } from '../supabaseClient';
-
 interface AddRaffleModalProps {
   show: boolean;
   onClose: () => void;
@@ -156,19 +154,30 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
       soldNumbers: [], 
     };
     
-    const { data, error } = await supabase
-      .from('sorteos') // nombre de tu tabla en Supabase
-      .insert([newRaffle]);
+    try {
+      const response = await fetch('/api/add-raffle', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newRaffle),
+      });
 
-    setIsLoading(false);
+      const result = await response.json();
 
-    if (error) {
-      setErrorMessage("Error al guardar el sorteo: " + error.message);
-      return;
+      if (!response.ok) {
+        throw new Error(result.message || 'Error al guardar el sorteo.');
+      }
+
+      onAdd(newRaffle);
+      onClose();
+
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Ocurrió un error inesperado.';
+      setErrorMessage(errorMessage);
+    } finally {
+      setIsLoading(false);
     }
-
-    onAdd(newRaffle); // solo si quieres actualizar el estado local
-    onClose();
   };
 
   if (!show) return null;
@@ -292,9 +301,4 @@ const AddRaffleModal: React.FC<AddRaffleModalProps> = ({ show, onClose, onAdd, a
 };
 export default AddRaffleModal;
 
-import { createClient } from '@supabase/supabase-js';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+declare module '@vercel/kv';
