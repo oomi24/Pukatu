@@ -1,0 +1,6 @@
+{
+  "name": "Pukatu - Gran Sorteo",
+  "description": "A web application for Pukatu's grand raffle, featuring a prize draw slot machine and admin login. This version uses client-side authentication for demonstration purposes only.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}

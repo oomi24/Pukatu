@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pukatu - Gran Sorteo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="/src/index.css" />
+    <style>
+      body {
+        font-family: 'Montserrat', sans-serif;
+        background-color: #1a1a1a;
+        color: #fff;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        margin: 0;
+      }
+      /* Custom scrollbar for webkit browsers */
+      ::-webkit-scrollbar { width: 8px; }
+      ::-webkit-scrollbar-track { background: #2d3748; } /* Tailwind gray-700 */
+      ::-webkit-scrollbar-thumb { background: #f7ca18; border-radius: 4px; } /* Pukatu yellow */
+      ::-webkit-scrollbar-thumb:hover { background: #e6b800; }
+
+      /* Ensure Orbitron weights are available */
+      .font-orbitron { font-family: 'Orbitron', sans-serif; }
+
+      /* Global Swiper styles (variables) */
+      :root {
+        --swiper-navigation-color: #f7ca18;
+        --swiper-pagination-color: #f7ca18;
+        --swiper-pagination-bullet-inactive-color: #fff;
+        --swiper-pagination-bullet-inactive-opacity: 0.5;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
