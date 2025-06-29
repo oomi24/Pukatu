@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import type { UUID } from '../types';
+import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
 interface AddAdminModalProps {
   show: boolean;
@@ -8,7 +13,20 @@ interface AddAdminModalProps {
   existingUsernames: string[];
 }
 
+const schema = z.object({
+  username: z.string().min(3),
+  password: z.string().min(6),
+  displayName: z.string().min(1),
+  whatsAppNumber: z.string().optional(),
+  securityQuestion: z.string().optional(),
+  securityAnswer: z.string().optional(),
+});
+
 const AddAdminModal: React.FC<AddAdminModalProps> = ({ show, onClose, onAddAdmin, existingUsernames }) => {
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: zodResolver(schema)
+  });
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -37,19 +55,14 @@ const AddAdminModal: React.FC<AddAdminModalProps> = ({ show, onClose, onAddAdmin
     }
   }, [show, resetFormFields]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: any) => {
     setErrorMessage(null);
 
-    if (!username.trim() || !password.trim() || !displayName.trim()) {
-      setErrorMessage("Usuario, contraseña y nombre visible son obligatorios.");
-      return;
-    }
-    if (password !== confirmPassword) {
+    if (data.password !== confirmPassword) {
       setErrorMessage("Las contraseñas no coinciden.");
       return;
     }
-    if (existingUsernames.map(u => u.toLowerCase()).includes(username.trim().toLowerCase())) {
+    if (existingUsernames.map(u => u.toLowerCase()).includes(data.username.trim().toLowerCase())) {
         setErrorMessage("Este nombre de usuario ya existe. Por favor, elige otro.");
         return;
     }
@@ -65,14 +78,16 @@ const AddAdminModal: React.FC<AddAdminModalProps> = ({ show, onClose, onAddAdmin
 
     setIsLoading(true);
 
+    const hashedPassword = await bcrypt.hash(password, 12);
+
     const newAdmin: AdminAccount = {
-      id: `admin-${Date.now()}-${username.trim().toLowerCase()}`, // Generate unique ID
-      username: username.trim(),
-      password: password, // Aquí se guarda la contraseña
-      displayName: displayName.trim(),
-      whatsAppNumber: whatsAppNumber.trim() || undefined,
-      securityQuestion: securityQuestion.trim() || undefined,
-      securityAnswer: securityAnswer.trim() || undefined,
+      id: uuidv4(),
+      username: data.username.trim(),
+      password: hashedPassword, // Aquí se guarda la contraseña
+      displayName: data.displayName.trim(),
+      whatsAppNumber: data.whatsAppNumber.trim() || undefined,
+      securityQuestion: data.securityQuestion.trim() || undefined,
+      securityAnswer: data.securityAnswer.trim() || undefined,
     };
     
     // Simulate API delay
@@ -108,16 +123,18 @@ const AddAdminModal: React.FC<AddAdminModalProps> = ({ show, onClose, onAddAdmin
           </h5>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-5 overflow-y-auto space-y-3">
+        <form onSubmit={handleSubmit(onSubmit)} className="p-5 overflow-y-auto space-y-3">
           <div>
             <label htmlFor="adminUsername" className={labelClasses}>Nombre de Usuario (para login) <span className="text-red-500">*</span></label>
-            <input type="text" id="adminUsername" value={username} onChange={(e) => setUsername(e.target.value)} className={inputClasses} placeholder="Ej: nuevo_admin" required disabled={isLoading}/>
+            <input type="text" id="adminUsername" {...register("username")} className={inputClasses} placeholder="Ej: nuevo_admin" required disabled={isLoading}/>
+            {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username.message}</p>}
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="adminPassword" className={labelClasses}>Contraseña <span className="text-red-500">*</span></label>
-              <input type="password" id="adminPassword" value={password} onChange={(e) => setPassword(e.target.value)} className={inputClasses} placeholder="Mínimo 6 caracteres" required minLength={6} disabled={isLoading}/>
+              <input type="password" id="adminPassword" {...register("password")} className={inputClasses} placeholder="Mínimo 6 caracteres" required minLength={6} disabled={isLoading}/>
+              {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
             </div>
             <div>
               <label htmlFor="adminConfirmPassword" className={labelClasses}>Confirmar Contraseña <span className="text-red-500">*</span></label>
@@ -127,23 +144,24 @@ const AddAdminModal: React.FC<AddAdminModalProps> = ({ show, onClose, onAddAdmin
 
           <div>
             <label htmlFor="adminDisplayName" className={labelClasses}>Nombre Visible (para mostrar) <span className="text-red-500">*</span></label>
-            <input type="text" id="adminDisplayName" value={displayName} onChange={(e) => setDisplayName(e.target.value)} className={inputClasses} placeholder="Ej: Administrador Ventas" required disabled={isLoading}/>
+            <input type="text" id="adminDisplayName" {...register("displayName")} className={inputClasses} placeholder="Ej: Administrador Ventas" required disabled={isLoading}/>
+            {errors.displayName && <p className="text-red-500 text-xs mt-1">{errors.displayName.message}</p>}
           </div>
           
           <div>
             <label htmlFor="adminWhatsApp" className={labelClasses}>Número de WhatsApp (Opcional, Ej: 584120000000)</label>
-            <input type="tel" id="adminWhatsApp" value={whatsAppNumber} onChange={(e) => setWhatsAppNumber(e.target.value)} className={inputClasses} placeholder="Solo números" pattern="^\d*$" title="Solo números" disabled={isLoading}/>
+            <input type="tel" id="adminWhatsApp" {...register("whatsAppNumber")} className={inputClasses} placeholder="Solo números" pattern="^\d*$" title="Solo números" disabled={isLoading}/>
           </div>
           
           <div className="pt-2 space-y-1">
              <p className={`${labelClasses} text-gray-400`}>Pregunta y Respuesta de Seguridad (Opcional, para recuperación)</p>
              <div>
                 <label htmlFor="adminSecQuestion" className={labelClasses}>Pregunta de Seguridad</label>
-                <input type="text" id="adminSecQuestion" value={securityQuestion} onChange={(e) => setSecurityQuestion(e.target.value)} className={inputClasses} placeholder="Ej: ¿Nombre de tu primera mascota?" disabled={isLoading}/>
+                <input type="text" id="adminSecQuestion" {...register("securityQuestion")} className={inputClasses} placeholder="Ej: ¿Nombre de tu primera mascota?" disabled={isLoading}/>
             </div>
             <div>
                 <label htmlFor="adminSecAnswer" className={labelClasses}>Respuesta de Seguridad</label>
-                <input type="text" id="adminSecAnswer" value={securityAnswer} onChange={(e) => setSecurityAnswer(e.target.value)} className={inputClasses} placeholder="Ej: Firulais" disabled={isLoading}/>
+                <input type="text" id="adminSecAnswer" {...register("securityAnswer")} className={inputClasses} placeholder="Ej: Firulais" disabled={isLoading}/>
             </div>
           </div>
 

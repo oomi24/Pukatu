@@ -15,21 +15,3 @@ export default async function handler(req, res) {
     return res.status(500).json({ message: 'Error al crear el sorteo' });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: true,
-    externalResolver: true,
-  },
-  headers: [
-    {
-      source: '/(.*)',
-      headers: [
-        {
-          key: 'Cache-Control',
-          value: 'no-store, max-age=0',
-        },
-      ],
-    },
-  ],
-};
