@@ -1,15 +1,16 @@
 {
-  "version": 2,
-  "builds": [
+  "headers": [
     {
-      "src": "api/raffle.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
+      "source": "/",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
     {
-      "src": "/api/raffle",
-      "dest": "api/raffle.js"
+      "source": "/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
     }
   ]
 }
