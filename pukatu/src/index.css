@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #1a1a1a; /* bg-neutral-900 or similar */
+  color: #fff; /* text-white */
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #2d3748; /* bg-gray-700 */
+}
+::-webkit-scrollbar-thumb {
+  background: #f7ca18; /* Pukatu yellow */
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #e6b800; 
+}
+
+/* Ensure Orbitron weights are available */
+.font-['Orbitron'] { 
+  font-family: 'Orbitron', sans-serif; 
+}
+
+/* Global Swiper styles (variables) */
+:root {
+  --swiper-navigation-color: #f7ca18;
+  --swiper-pagination-color: #f7ca18;
+  --swiper-pagination-bullet-inactive-color: #fff;
+  --swiper-pagination-bullet-inactive-opacity: 0.5;
+}
