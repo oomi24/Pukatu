@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: my-pocketbase-backend # Puedes cambiar este nombre, pero usa minúsculas y guiones
+    env: go
+    buildCommand: chmod +x pocketbase # Asegúrate de que el ejecutable tenga permisos de ejecución
+    startCommand: ./pocketbase serve --http 0.0.0.0:10000 --dir pb_data # Inicia PocketBase en el puerto 10000 y especifica la carpeta de datos
+    healthCheckPath: /api/health # Ruta para que Render verifique si PocketBase está vivo
+    envVars:
+      - key: PORT # Render usa la variable PORT. PocketBase se enlazará a ella.
+        value: 10000
+      - key: POCKETBASE_URL # Esto es opcional, pero útil si necesitas la URL de tu PocketBase dentro de la app.
+        fromServiceDiscovery:
+          serviceName: my-pocketbase-backend
+          type: web
+          property: host
+    # freeInstance: true # Descomentar para usar la instancia gratuita (puede dormir si no hay tráfico)
+    # scales: 0 # Descomentar para pausar el servicio si no lo estás usando
