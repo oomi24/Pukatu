@@ -1,0 +1,6 @@
+{
+  "name": "Pukatu - Online Lottery",
+  "description": "An online lottery application where users can buy tickets for various raffles and super admins can manage the platform. Features include interactive ticket boards, automatic draws with a slot machine animation, and an admin dashboard.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}

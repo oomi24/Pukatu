@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2322d3ee'%3E%3Cpath d='M22 10V6c0-1.1-.9-2-2-2H4c-1.1 0-1.99.9-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2zM15 15H9v-2h6v2zm0-4H9V9h6v2z'/%3E%3C/svg%3E" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pukatu - Lotería Online</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Poppins:wght@600;700;800&family=Montserrat:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <style>
+    body {
+      /* Dark space gradient background */
+      background-color: #020617;
+      background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.05) 1px, transparent 0);
+      background-size: 2rem 2rem;
+      font-family: 'Inter', sans-serif;
+      color: #e2e8f0;
+    }
+    .font-poppins { font-family: 'Poppins', sans-serif; }
+    .font-montserrat { font-family: 'Montserrat', sans-serif; }
+
+    /* General Neon Effects - More subtle */
+    .neon-accent { text-shadow: 0 0 4px #22d3ee, 0 0 8px #22d3ee, 0 0 12px #22d3ee; }
+    .neon-highlight { text-shadow: 0 0 4px #c026d3, 0 0 8px #c026d3, 0 0 12px #c026d3; }
+    .neon-border-accent { box-shadow: 0 0 2px #22d3ee, 0 0 4px #22d3ee inset; }
+    .neon-border-highlight { box-shadow: 0 0 2px #c026d3, 0 0 4px #c026d3 inset; }
+    
+    .glassmorphism {
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Millionaire Bag Premium Effects */
+    @keyframes floating {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700; }
+      50% { box-shadow: 0 0 20px #FFD700, 0 0 30px #FFA500; }
+      100% { box-shadow: 0 0 5px #FFD700, 0 0 10px #FFD700; }
+    }
+
+    .million-bag-glow {
+      animation: floating 3s ease-in-out infinite, glow 4s ease-in-out infinite;
+    }
+    
+    .text-gold {
+        color: #FFD700;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    }
+    
+    /* Super Admin Theme */
+    .super-admin-bg {
+        background-color: #8B0000;
+        border: 1px solid #FFD700;
+    }
+    .super-admin-text {
+        color: #FFD700;
+    }
+    .super-admin-input {
+        background-color: #4c0000;
+        border-color: #FFD700;
+        color: #FFFFFF;
+    }
+     .super-admin-button {
+        background-color: #FFD700;
+        color: #8B0000;
+        font-weight: bold;
+     }
+
+
+  </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.1.0/",
+    "react": "https://esm.sh/react@^19.1.0",
+    "react-dom/": "https://esm.sh/react-dom@^19.1.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
